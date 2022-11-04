@@ -1,4 +1,4 @@
-package com.inti.model.controller;
+package com.inti.controller;
 
 import java.util.List;
 
