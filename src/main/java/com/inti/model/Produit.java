@@ -28,4 +28,5 @@ public class Produit {
 	private String type;
 	private LocalDate dateFab;
 	private LocalDate dateExp;
+	//ajouter dépendances avec resto
 }
