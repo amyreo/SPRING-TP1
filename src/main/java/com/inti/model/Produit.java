@@ -33,11 +33,12 @@ public class Produit {
 	private String type;
 	private LocalDate dateFab;
 	private LocalDate dateExp;
-	//ajouter dépendances avec resto
 	
-	@ManyToMany (cascade = CascadeType.ALL)
-	@JoinTable(name ="Produits_Restaurant",
-				joinColumns = @JoinColumn (name = "idProduit"),
-				inverseJoinColumns = @JoinColumn (name = "numRestaurant"))
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "Produits_Restaurant", joinColumns = @JoinColumn(name = "idProduit"), inverseJoinColumns = @JoinColumn(name = "numRestaurant"))
 	protected List<Restaurant> listeRestaurant;
 }
+
+
+
