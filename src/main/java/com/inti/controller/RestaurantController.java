@@ -38,7 +38,7 @@ public class RestaurantController {
 	}
 
 	@PostMapping("/saveRestaurant")
-	public boolean saveRestaurant(@RequestBody Restaurant r){
+	public boolean saveRestaurant(@RequestBody Restaurant r) {
 		if (r.getNumero() > 0) {
 			log.info("Le restaurant a été enregisté");
 			irr.save(r);
@@ -89,11 +89,6 @@ public class RestaurantController {
 			listeProduit.add(prod);
 			log.debug("On a ajouté le prod à la liste");
 
-			IProduitService ips = new ProduitServiceImpl();
-			log.debug("OSEF");
-//			ips.saveProduit(prod);
-//			log.debug("On a save le produit");
-			
 			restaurant.setListeProduit(listeProduit);
 			irr.save(restaurant);
 			return true;
