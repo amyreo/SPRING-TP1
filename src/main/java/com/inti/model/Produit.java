@@ -1,9 +1,14 @@
 package com.inti.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -29,4 +34,10 @@ public class Produit {
 	private LocalDate dateFab;
 	private LocalDate dateExp;
 	//ajouter dépendances avec resto
+	
+	@ManyToMany (cascade = CascadeType.ALL)
+	@JoinTable(name ="Produits_Restaurant",
+				joinColumns = @JoinColumn (name = "idProduit"),
+				inverseJoinColumns = @JoinColumn (name = "numRestaurant"))
+	protected List<Restaurant> listeRestaurant;
 }

@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inti.model.Restaurant;
 import com.inti.model.service.IRestaurantRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping ("/Restaurant")
+@Slf4j
 public class RestaurantController {
 	
 	@Autowired
@@ -34,6 +37,7 @@ public class RestaurantController {
 	{
 		if (r.getNumero()>0) 
 		{
+			log.info("Le restaurant a été enregisté");
 			irr.save(r);
 			return true;
 		}
