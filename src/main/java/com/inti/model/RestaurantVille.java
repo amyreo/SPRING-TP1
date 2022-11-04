@@ -16,12 +16,12 @@ public class RestaurantVille extends Restaurant{
 
 	private double taxe;
 	
-	public RestaurantVille(int numero, int numTel) {
+	public RestaurantVille(int numero, String numTel) {
 		super(numero, numTel);
 	}
 	
 
-	public RestaurantVille(int numero, int numTel, double taxe) {
+	public RestaurantVille(int numero, String numTel, double taxe) {
 		super(numero, numTel);
 		this.taxe = taxe;
 	}
