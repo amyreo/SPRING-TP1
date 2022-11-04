@@ -12,41 +12,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.inti.model.Produit;
 import com.inti.model.Restaurant;
 import com.inti.model.service.IRestaurantRepository;
+import com.inti.repository.IProduitRepository;
+import com.inti.service.IProduitService;
+import com.inti.service.ProduitServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping ("/Restaurant")
+@RequestMapping("/Restaurant")
 @Slf4j
 public class RestaurantController {
-	
+
 	@Autowired
 	IRestaurantRepository irr;
-	
+
+	@Autowired
+	IProduitRepository ipr;
+
 	@GetMapping("/listeRestaurant")
-	public List<Restaurant> getRestaurants()
-	{
+	public List<Restaurant> getRestaurants() {
 		return irr.findAll();
 	}
-	
+
 	@PostMapping("/saveRestaurant")
-	public boolean saveRestaurant (@RequestBody Restaurant r) 
-	{
-		if (r.getNumero()>0) 
-		{
+	public boolean saveRestaurant(@RequestBody Restaurant r){
+		if (r.getNumero() > 0) {
 			log.info("Le restaurant a été enregisté");
 			irr.save(r);
 			return true;
 		}
 		return false;
 	}
-	
+
 	@GetMapping("/getRestaurant/{numero}")
-	public Restaurant getRestaurant (@PathVariable int numero) 
-	{
+	public Restaurant getRestaurant(@PathVariable int numero) {
 		try {
 			irr.findById(numero).get();
 		} catch (Exception e) {
@@ -54,29 +56,52 @@ public class RestaurantController {
 		}
 		return null;
 	}
-	
+
 	@DeleteMapping("/deleteRestaurant/{numero}")
-	public boolean deleteRestaurant (@PathVariable int numero) 
-	{
-		if (numero!=0) 
-		{
+	public boolean deleteRestaurant(@PathVariable int numero) {
+		if (numero != 0) {
 			irr.deleteById(numero);
 			return true;
 		}
 		return false;
 	}
-	
-	@PutMapping ("/updateRestaurant/{numero}")
-	public Restaurant updateRestaurant(@RequestBody Restaurant nouveauRestaurant, @PathVariable int numero) 
-	{
-		return irr.findById(numero)
-				.map(Restaurant -> {
-					Restaurant.setNumTel(nouveauRestaurant.getNumTel());
-					return irr.save(Restaurant);				
-				})
-				.orElseGet(()->{
-					return irr.save(nouveauRestaurant);
-				});
+
+	@PutMapping("/updateRestaurant/{numero}")
+	public Restaurant updateRestaurant(@RequestBody Restaurant nouveauRestaurant, @PathVariable int numero) {
+		return irr.findById(numero).map(Restaurant -> {
+			Restaurant.setNumTel(nouveauRestaurant.getNumTel());
+			return irr.save(Restaurant);
+		}).orElseGet(() -> {
+			return irr.save(nouveauRestaurant);
+		});
+
+	}
+
+	@PostMapping("ajoutProduit/{idR}")
+	public boolean associerProduitsToRestaurant(@PathVariable int idR, @RequestBody Produit prod) {
+
+		try {
+			log.info("On a trouvé le père noel");
+			Restaurant restaurant = irr.findById(idR).get();
+			log.debug("On a trouvé le resto");
+			List<Produit> listeProduit = restaurant.getListeProduit();
+			log.debug("On a trouvé la liste de produits");
+			listeProduit.add(prod);
+			log.debug("On a ajouté le prod à la liste");
+
+			IProduitService ips = new ProduitServiceImpl();
+			log.debug("OSEF");
+//			ips.saveProduit(prod);
+//			log.debug("On a save le produit");
+			
+			restaurant.setListeProduit(listeProduit);
+			irr.save(restaurant);
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 
 	}
 

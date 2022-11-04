@@ -13,12 +13,12 @@ import lombok.Data;
 public class RestaurantCampagne extends Restaurant{
 	private boolean circulationEtRondPoint;
 
-	public RestaurantCampagne(int numero, String numTel, List<Produit> listeProduit) {
-		super(numero, numTel, listeProduit);
+	public RestaurantCampagne(int numero, String numTel, List<Produit> listeProduit, Entreprise entreprise) {
+		super(numero, numTel, listeProduit, entreprise);
 	}
 
-	public RestaurantCampagne(int numero, String numTel, List<Produit> listeProduit, boolean circulationEtRondPoint) {
-		super(numero, numTel, listeProduit);
+	public RestaurantCampagne(int numero, String numTel, List<Produit> listeProduit, boolean circulationEtRondPoint, Entreprise entreprise) {
+		super(numero, numTel, listeProduit, entreprise);
 		this.circulationEtRondPoint = circulationEtRondPoint;
 	}
 
