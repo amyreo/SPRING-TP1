@@ -16,9 +16,6 @@ import com.inti.model.Produit;
 import com.inti.model.Restaurant;
 import com.inti.model.service.IRestaurantRepository;
 import com.inti.repository.IProduitRepository;
-import com.inti.service.IProduitService;
-import com.inti.service.ProduitServiceImpl;
-
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -81,11 +78,8 @@ public class RestaurantController {
 	public boolean associerProduitsToRestaurant(@PathVariable int idR, @RequestBody Produit prod) {
 
 		try {
-			log.info("On a trouvé le père noel");
 			Restaurant restaurant = irr.findById(idR).get();
-			log.debug("On a trouvé le resto");
 			List<Produit> listeProduit = restaurant.getListeProduit();
-			log.debug("On a trouvé la liste de produits");
 			listeProduit.add(prod);
 			log.debug("On a ajouté le prod à la liste");
 
