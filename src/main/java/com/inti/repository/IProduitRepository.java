@@ -9,6 +9,6 @@ import com.inti.model.Produit;
 
 @Repository
 @Transactional
-public interface IProduitRepository extends JpaRepository<Produit, Integer>{
+public interface IProduitRepository extends JpaRepository<Produit, Integer> {
 
 }

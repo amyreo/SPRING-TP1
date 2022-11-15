@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -24,15 +26,16 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Produit {
 	@Id
 	@NonNull
-	private int id;
-	private String reference;
-	private String type;
-	private LocalDate dateFab;
-	private LocalDate dateExp;
+	protected int id;
+	protected String reference;
+	protected String type;
+	protected LocalDate dateFab;
+	protected LocalDate dateExp;
 	
 
 	@ManyToMany(cascade = CascadeType.ALL)

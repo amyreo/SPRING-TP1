@@ -1,5 +1,6 @@
 package com.inti.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inti.exception.TailleTelephoneException;
 import com.inti.model.Produit;
+import com.inti.model.ProduitPerime;
 import com.inti.model.Restaurant;
 import com.inti.model.service.IRestaurantRepository;
 import com.inti.repository.IProduitRepository;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/Restaurant")
 @Slf4j
+@Api(value = "Documentation RestaurantController", description = "Cette classe nous permet de traiter toutes les fonctionnalités d'un restaurant.")
 public class RestaurantController {
 
 	@Autowired
@@ -30,16 +37,25 @@ public class RestaurantController {
 	IProduitRepository ipr;
 
 	@GetMapping("/listeRestaurant")
+	@ApiOperation(value = "Cette méthode permet de retourner la liste des restaurants créés.")
 	public List<Restaurant> getRestaurants() {
 		return irr.findAll();
 	}
 
 	@PostMapping("/saveRestaurant")
-	public boolean saveRestaurant(@RequestBody Restaurant r) {
+	@ApiOperation(value = "Cette méthode permet d'enregistrer dans la bdd un nouveau restaurant.")
+	public boolean saveRestaurant(@RequestBody Restaurant r) throws TailleTelephoneException {
 		if (r.getNumero() > 0) {
-			log.info("Le restaurant a été enregisté");
-			irr.save(r);
-			return true;
+			if (r.getNumTel().length() == 10) {
+				log.info("Le restaurant a été enregisté");
+				irr.save(r);
+				return true;
+			}
+
+			else {
+				throw new TailleTelephoneException();
+			}
+
 		}
 		return false;
 	}
@@ -92,6 +108,22 @@ public class RestaurantController {
 		}
 		return false;
 
+	}
+
+	@GetMapping("produitsPerimes")
+	public boolean getProduitsPerimesOfRestaurant(@PathVariable int id) {
+		Restaurant r = irr.findById(id).get();
+		List<Produit> listeProduit = r.getListeProduit();
+		ProduitPerime pp = new ProduitPerime();
+		for (Produit produit : listeProduit) {
+			if (LocalDate.now().isAfter(produit.getDateExp())) {
+				pp = (ProduitPerime) produit;
+				pp.setPerime(true);
+				ipr.deleteById(produit.getId());
+				ipr.save(pp);
+			}
+		}
+		return true;
 	}
 
 }
